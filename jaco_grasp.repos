@@ -1,0 +1,13 @@
+repositories:
+  src/deep_grasp_demo:
+    type: git
+    url: git@github.com:avazahedi/deep_grasp_demo.git
+    version: jaco_demo
+  src/moveit_task_constructor:
+    type: git
+    url: git@github.com:avazahedi/moveit_task_constructor.git
+    version: jaco_demo
+  src/jaco_base:
+    type: git
+    url: git@github.com:argallab/jaco_base.git
+    version: msr23-grasp
