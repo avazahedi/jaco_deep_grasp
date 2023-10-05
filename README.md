@@ -55,15 +55,23 @@ make install
 
 ## Build the workspace
 ```
-cd jaco_grasp_ws
+# cd into jaco_grasp_ws
 catkin build
 ```
+
+Note: There may be many warnings with the kinova packages. These can be ignored for now.
 
 If there are missing dependencies, try the following and then build again.
 ```
 apt-get update
 rosdep install -y --from-paths . --ignore-src --rosdistro noetic
 ```
+
+If there is an issue getting python-pyudev, do  
+```
+apt-get install -y python3-pyudev
+```
+
 
 ## Run deep grasp demos
 Source the workspace

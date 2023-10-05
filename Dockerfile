@@ -174,17 +174,17 @@ RUN apt install python3-opencv
 # # DON'T DO dexnet_requirements.txt - messes up the version compatabilities
 # # doing them manually
 # # dill is installed with multiprocess
-# RUN python3 -m pip install --upgrade pip \
-#     && pip install tensorflow \
-#     && apt update \
-#     && apt install -y cmake libvtk7-dev python3-vtk7 python3-sip libosmesa6-dev meshlab libhdf5-dev \
-#     # dexnet_requirements.txt here to end of run statement
-#     && pip install scikit-learn \
-#     && pip install scikit-image \ 
-#     && pip install multiprocess \
-#     # && pip install dill \
-#     && pip install cvxopt==1.2.5 \
-#     && pip install trimesh
+RUN python3 -m pip install --upgrade pip \
+    && pip install tensorflow \
+    && apt update \
+    && apt install -y cmake libvtk7-dev python3-vtk7 python3-sip libosmesa6-dev meshlab libhdf5-dev \
+    # dexnet_requirements.txt here to end of run statement
+    && pip install scikit-learn \
+    && pip install scikit-image \ 
+    && pip install multiprocess \
+    # && pip install dill \
+    && pip install cvxopt==1.2.5 \
+    && pip install trimesh
 
 # # install deps from source
 #     # install autolab modules
