@@ -10,6 +10,14 @@ The following repositories should be added to your workspace in their desired br
 - jaco_base (msr23-grasp)
 - gpd (master)
 
+Make sure the kinova-ros repository inside jaco_base is correctly cloned.  
+```
+cd src/jaco_base
+git submodule update --init --recursive
+cd kinova-ros
+git switch msr23-grasp
+```
+
 ## Set up Docker
 First, build the image from the included Dockerfile  
 ```
@@ -55,4 +63,15 @@ If there are missing dependencies, try the following and then build again.
 ```
 apt-get update
 rosdep install -y --from-paths . --ignore-src --rosdistro noetic
+```
+
+## Run deep grasp demos
+Source the workspace
+```
+source devel/setup.bash
+```
+
+Run the jaco_deep_grasp launch file
+```
+roslaunch jaco_grasp_ros jaco_deep_grasp.launch
 ```
