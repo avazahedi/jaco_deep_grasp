@@ -11,8 +11,11 @@ The following repositories should be added to your workspace in their desired br
 - gpd (master)
 
 ## Set up Docker
-First, build the image from the included Dockerfile
-`sudo docker build -t jaco_deep_grasp_image .`
+First, build the image from the included Dockerfile  
+```
+cd src/jaco_deep_grasp
+sudo docker build -t jaco_deep_grasp_image .
+```
 where `jaco_deep_grasp_image` is the name of the image.
 
 Then, build the container with the necesssary mounts:

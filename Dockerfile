@@ -230,8 +230,8 @@ RUN apt install python3-opencv
 
 # # --------------------------------------------------------------------------------
 
-
-RUN apt install -y python3-catkin-tools python3-osrf-pycommon
+RUN apt update \
+    && apt install -y python3-catkin-tools python3-osrf-pycommon
 
 # ## Install realsense libraries
 # RUN mkdir -p /etc/apt/keyrings \
