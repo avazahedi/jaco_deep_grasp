@@ -11,3 +11,7 @@ repositories:
     type: git
     url: git@github.com:argallab/jaco_base.git
     version: msr23-grasp
+  src/gpd:
+    type: git
+    url: git@github.com:avazahedi/gpd.git
+    version: master

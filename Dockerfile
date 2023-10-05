@@ -147,86 +147,103 @@ RUN apt install python3-opencv
 #     && make -j4 \
 #     && make install \
 #     && ldconfig
-## OpenCv
+## OpenCV
 
-## GPD library
-# RUN cd /home/avaz/new_dockerfile/gpd \
-#     && mkdir build \
-#     && cd build \
+# ## GPD library
+# # RUN cd /home/avaz/new_dockerfile/gpd \
+# #     && mkdir build \
+# #     && cd build \
+# #     && cmake .. \
+# #     && make -j \
+# #     && make install     # builds to 100% but see error in Final Project Resources google doc - this is issue with unmodified version
+# RUN git clone https://github.com/avazahedi/gpd \
+#     && cd gpd \
+#     && mkdir build && cd build \
 #     && cmake .. \
 #     && make -j \
-#     && make install     # builds to 100% but see error in Final Project Resources google doc - this is issue with unmodified version
-RUN git clone https://github.com/avazahedi/gpd \
-    && cd gpd \
-    && mkdir build && cd build \
-    && cmake .. \
-    && make -j \
-    && make install
+#     && make install
+# ## GPD 
 
-## Dex-Net
-# installing Tensorflow 2.12 instead of 1.15
-# python3-vtk7 instead of python-vtk6
-# libvtk7-dev instead libvtk6-dev
-# skipping python-qt4 (looks like python3-pyqt5 is already installed)
+# # --------------------------------------------------------------------------------
+# ## Dex-Net
+# # installing Tensorflow 2.12 instead of 1.15
+# # python3-vtk7 instead of python-vtk6
+# # libvtk7-dev instead libvtk6-dev
+# # skipping python-qt4 (looks like python3-pyqt5 is already installed)
 
-# DON'T DO dexnet_requirements.txt - messes up the version compatabilities
-# doing them manually
-# dill is installed with multiprocess
-RUN python3 -m pip install --upgrade pip \
-    && pip install tensorflow \
-    && apt update \
-    && apt install -y cmake libvtk7-dev python3-vtk7 python3-sip libosmesa6-dev meshlab libhdf5-dev \
-    # dexnet_requirements.txt here to end of run statement
-    && pip install scikit-learn \
-    && pip install scikit-image \ 
-    && pip install multiprocess \
-    # && pip install dill \
-    && pip install cvxopt==1.2.5 \
-    && pip install trimesh
+# # DON'T DO dexnet_requirements.txt - messes up the version compatabilities
+# # doing them manually
+# # dill is installed with multiprocess
+# RUN python3 -m pip install --upgrade pip \
+#     && pip install tensorflow \
+#     && apt update \
+#     && apt install -y cmake libvtk7-dev python3-vtk7 python3-sip libosmesa6-dev meshlab libhdf5-dev \
+#     # dexnet_requirements.txt here to end of run statement
+#     && pip install scikit-learn \
+#     && pip install scikit-image \ 
+#     && pip install multiprocess \
+#     # && pip install dill \
+#     && pip install cvxopt==1.2.5 \
+#     && pip install trimesh
 
-# install deps from source
-    # install autolab modules
-RUN cd /home \
-    && mkdir dexnet_deps \
-    && cd dexnet_deps \
-    && git clone https://github.com/BerkeleyAutomation/autolab_core.git \
-    && git clone https://github.com/BerkeleyAutomation/perception.git \
-    && git clone https://github.com/BerkeleyAutomation/gqcnn.git \
-    && git clone https://github.com/BerkeleyAutomation/visualization.git \
-    && cd autolab_core \
-    && python3 setup.py develop \
-    && cd .. \
-    && cd perception \
-    && python3 setup.py develop \
-    && cd .. \
-    && cd gqcnn \
-    && python3 setup.py develop \
-    && cd .. \
-    && cd visualization \
-    && python3 setup.py develop \
-    && cd .. 
+# # install deps from source
+#     # install autolab modules
+# RUN cd /home \
+#     && mkdir dexnet_deps \
+#     && cd dexnet_deps \
+#     && git clone https://github.com/BerkeleyAutomation/autolab_core.git \
+#     && git clone https://github.com/BerkeleyAutomation/perception.git \
+#     && git clone https://github.com/BerkeleyAutomation/gqcnn.git \
+#     && git clone https://github.com/BerkeleyAutomation/visualization.git \
+#     && cd autolab_core \
+#     && python3 setup.py develop \
+#     && cd .. \
+#     && cd perception \
+#     && python3 setup.py develop \
+#     && cd .. \
+#     && cd gqcnn \
+#     && python3 setup.py develop \
+#     && cd .. \
+#     && cd visualization \
+#     && python3 setup.py develop \
+#     && cd .. 
     
-# RUN cd gqcnn \
-#     # && wget https://drive.google.com/uc?id=1fbC0sGtVEUmAy7WPT_J-50IuIInMR9oO&export=download
-#     && wget --load-cookies /tmp/cookies.txt "https://docs.google.com/uc?export=download&confirm=$(wget --quiet --save-cookies /tmp/cookies.txt --keep-session-cookies --no-check-certificate 'https://docs.google.com/uc?export=download&id=FILEID' -O- | sed -rn 's/.*confirm=([0-9A-Za-z_]+).*/\1\n/p')&id=FILEID" -O FILENAME && rm -rf /tmp/cookies.txt
+# # RUN cd gqcnn \
+# #     # && wget https://drive.google.com/uc?id=1fbC0sGtVEUmAy7WPT_J-50IuIInMR9oO&export=download
+# #     && wget --load-cookies /tmp/cookies.txt "https://docs.google.com/uc?export=download&confirm=$(wget --quiet --save-cookies /tmp/cookies.txt --keep-session-cookies --no-check-certificate 'https://docs.google.com/uc?export=download&id=FILEID' -O- | sed -rn 's/.*confirm=([0-9A-Za-z_]+).*/\1\n/p')&id=FILEID" -O FILENAME && rm -rf /tmp/cookies.txt
 
-######## can't cd because haven't mounted yet - do this after creating the image using the dexnet_setup.sh file
-# once the models are in
-# RUN && cd gqcnn/models \
-#     && unzip -a GQCNN-2.0.zip \
-#     && mv GQ-Image-Wise GQCNN-2.0 \
-#     && unzip -a GQCNN-2.1.zip \
-#     && mv GQ-Bin-Picking-Eps90 GQCNN-2.1 \
-#     && unzip -a GQCNN-3.0.zip \
-#     && mv GQ-Suction GQCNN-3.0 \
-#     # missing these two 
-#     # && unzip -a GQCNN-4.0-PJ.zip \
-#     # && unzip -a GQCNN-4.0-SUCTION.zip \
-#     && unzip -a FC-GQCNN-4.0-PJ.zip \
-#     && unzip -a FC-GQCNN-4.0-SUCTION.zip \
-#     && cd ..
+# ######## can't cd because haven't mounted yet - do this after creating the image using the dexnet_setup.sh file
+# # once the models are in
+# # RUN && cd gqcnn/models \
+# #     && unzip -a GQCNN-2.0.zip \
+# #     && mv GQ-Image-Wise GQCNN-2.0 \
+# #     && unzip -a GQCNN-2.1.zip \
+# #     && mv GQ-Bin-Picking-Eps90 GQCNN-2.1 \
+# #     && unzip -a GQCNN-3.0.zip \
+# #     && mv GQ-Suction GQCNN-3.0 \
+# #     # missing these two 
+# #     # && unzip -a GQCNN-4.0-PJ.zip \
+# #     # && unzip -a GQCNN-4.0-SUCTION.zip \
+# #     && unzip -a FC-GQCNN-4.0-PJ.zip \
+# #     && unzip -a FC-GQCNN-4.0-SUCTION.zip \
+# #     && cd ..
+
+# # --------------------------------------------------------------------------------
+
 
 RUN apt install -y python3-catkin-tools python3-osrf-pycommon
+
+# ## Install realsense libraries
+# RUN mkdir -p /etc/apt/keyrings \
+#     && curl -sSf https://librealsense.intel.com/Debian/librealsense.pgp | tee /etc/apt/keyrings/librealsense.pgp > /dev/null \
+#     && apt install apt-transport-https \
+#     && echo "deb [signed-by=/etc/apt/keyrings/librealsense.pgp] https://librealsense.intel.com/Debian/apt-repo `lsb_release -cs` main" | \
+#     tee /etc/apt/sources.list.d/librealsense.list
+
+# RUN apt update \
+#     && apt install -y librealsense2-dkms librealsense2-utils librealsense2-dev 
+
+# ## realsense
 
 ####DEEPGRASP####
 
