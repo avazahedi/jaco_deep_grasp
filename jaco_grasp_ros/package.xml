@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>jaco_deep_grasp</name>
+  <version>0.0.1</version>
+  <description>Launch deep grasp demo for jaco 2 arm.</description>
+
+  <author email="avazahedi2023@u.northwestern.edu">Ava Zahedi</author>
+  <maintainer email="avazahedi2023@u.northwestern.edu">Ava Zahedi</maintainer>
+
+  <license>BSD</license>
+
+  <buildtool_depend>catkin</buildtool_depend>
+
+  <depend>roscpp</depend>
+  <depend>rosparam_shortcuts</depend>
+
+  <depend>moveit_task_constructor_demo</depend>
+  <depend>moveit_task_constructor_gpd</depend>
+
+  <test_depend>rostest</test_depend>
+</package>
