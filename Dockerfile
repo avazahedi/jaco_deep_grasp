@@ -157,6 +157,7 @@ RUN apt install -y python3-catkin-tools python3-osrf-pycommon
 ####DEEPGRASP####
 
 # for jaco_base
+RUN apt-get update
 RUN apt install -y ros-noetic-trac-ik-kinematics-plugin
 
 # # by default, open in /home/user directory
