@@ -67,8 +67,41 @@ RUN pip3 install matplotlib pymdptoolbox box2d-py tk pyglet pyudev ipython
 
 
 ####DEEPGRASP####
+# Install DeepGrasp stuff
+# RUN wget https://raw.githubusercontent.com/PickNikRobotics/deep_grasp_demo/master/pcl_install.sh && chmod +x pcl_install.sh && sudo ./pcl_install.sh
+# RUN wget https://raw.githubusercontent.com/PickNikRobotics/deep_grasp_demo/master/opencv_install.sh && chmod +x opencv_install.sh && sudo ./opencv_install.sh
+
 ## PCL
+# RUN wget https://github.com/PointCloudLibrary/pcl/archive/pcl-1.11.0.zip -O pcl-pcl-1.11.0.zip
+#     # && apt install unzip \
+#     # && unzip pcl-pcl-1.11.0.zip \
+#     # && cd pcl-pcl-1.11.0 \
+#     # && mkdir build && cd build \
+#     # && cmake -DCMAKE_BUILD_TYPE=Release .. \
+#     # && make -j4 \
+#     # && make install
+
+# print working directory
+# RUN pwd && ls
+
+# RUN mkdir /home/new_dockerfile 
+    # && cd /home/new_dockerfile
+
+# WORKDIR /home/avaz/new_dockerfile
+
+# ADD pcl-pcl-1.11.0.zip /home/new_dockerfile
+
+# RUN apt install unzip \
+#     && cd /home/new_dockerfile \
+#     && unzip pcl-pcl-1.11.0.zip \
+#     && cd pcl-pcl-1.11.0 \
+#     && mkdir build && cd build \
+#     && cmake -DCMAKE_BUILD_TYPE=Release .. \
+#     && make -j4 \
+#     && make install
 RUN apt install libpcl-dev
+## PCL
+
 
 ## OpenCV
 # dependencies
@@ -101,7 +134,28 @@ RUN apt install build-essential \
 
 RUN apt install python3-opencv
 
+# Download and build OpenCV
+# RUN wget https://github.com/opencv/opencv/archive/3.4.0.zip -O opencv-3.4.0.zip \
+#     && wget https://github.com/opencv/opencv_contrib/archive/3.4.0.zip -O opencv_contrib-3.4.0.zip \
+#     && apt install unzip \
+#     && unzip opencv-3.4.0.zip \
+#     && unzip opencv_contrib-3.4.0.zip \
+#     && cd  opencv-3.4.0 \
+#     && mkdir build \
+#     && cd build \
+#     && cmake -DCMAKE_BUILD_TYPE=Release -D WITH_CUDA=OFF -DCMAKE_INSTALL_PREFIX=/usr/local -DOPENCV_EXTRA_MODULES_PATH=../../opencv_contrib-3.4.0/modules -DOPENCV_ENABLE_NONFREE=True .. \
+#     && make -j4 \
+#     && make install \
+#     && ldconfig
+## OpenCv
+
 ## GPD library
+# RUN cd /home/avaz/new_dockerfile/gpd \
+#     && mkdir build \
+#     && cd build \
+#     && cmake .. \
+#     && make -j \
+#     && make install     # builds to 100% but see error in Final Project Resources google doc - this is issue with unmodified version
 RUN git clone https://github.com/avazahedi/gpd \
     && cd gpd \
     && mkdir build && cd build \
@@ -132,32 +186,51 @@ RUN python3 -m pip install --upgrade pip \
 
 # install deps from source
     # install autolab modules
-# RUN cd /home \
-#     && mkdir dexnet_deps \
-#     && cd dexnet_deps \
-#     && git clone https://github.com/BerkeleyAutomation/autolab_core.git \
-#     && git clone https://github.com/BerkeleyAutomation/perception.git \
-#     && git clone https://github.com/BerkeleyAutomation/gqcnn.git \
-#     && git clone https://github.com/BerkeleyAutomation/visualization.git \
-#     && cd autolab_core \
-#     && python3 setup.py develop \
-#     && cd .. \
-#     && cd perception \
-#     && python3 setup.py develop \
-#     && cd .. \
-#     && cd gqcnn \
-#     && python3 setup.py develop \
-#     && cd .. \
-#     && cd visualization \
-#     && python3 setup.py develop \
-#     && cd .. 
+RUN cd /home \
+    && mkdir dexnet_deps \
+    && cd dexnet_deps \
+    && git clone https://github.com/BerkeleyAutomation/autolab_core.git \
+    && git clone https://github.com/BerkeleyAutomation/perception.git \
+    && git clone https://github.com/BerkeleyAutomation/gqcnn.git \
+    && git clone https://github.com/BerkeleyAutomation/visualization.git \
+    && cd autolab_core \
+    && python3 setup.py develop \
+    && cd .. \
+    && cd perception \
+    && python3 setup.py develop \
+    && cd .. \
+    && cd gqcnn \
+    && python3 setup.py develop \
+    && cd .. \
+    && cd visualization \
+    && python3 setup.py develop \
+    && cd .. 
+    
+# RUN cd gqcnn \
+#     # && wget https://drive.google.com/uc?id=1fbC0sGtVEUmAy7WPT_J-50IuIInMR9oO&export=download
+#     && wget --load-cookies /tmp/cookies.txt "https://docs.google.com/uc?export=download&confirm=$(wget --quiet --save-cookies /tmp/cookies.txt --keep-session-cookies --no-check-certificate 'https://docs.google.com/uc?export=download&id=FILEID' -O- | sed -rn 's/.*confirm=([0-9A-Za-z_]+).*/\1\n/p')&id=FILEID" -O FILENAME && rm -rf /tmp/cookies.txt
+
+######## can't cd because haven't mounted yet - do this after creating the image using the dexnet_setup.sh file
+# once the models are in
+# RUN && cd gqcnn/models \
+#     && unzip -a GQCNN-2.0.zip \
+#     && mv GQ-Image-Wise GQCNN-2.0 \
+#     && unzip -a GQCNN-2.1.zip \
+#     && mv GQ-Bin-Picking-Eps90 GQCNN-2.1 \
+#     && unzip -a GQCNN-3.0.zip \
+#     && mv GQ-Suction GQCNN-3.0 \
+#     # missing these two 
+#     # && unzip -a GQCNN-4.0-PJ.zip \
+#     # && unzip -a GQCNN-4.0-SUCTION.zip \
+#     && unzip -a FC-GQCNN-4.0-PJ.zip \
+#     && unzip -a FC-GQCNN-4.0-SUCTION.zip \
+#     && cd ..
 
 RUN apt install -y python3-catkin-tools python3-osrf-pycommon
 
 ####DEEPGRASP####
 
 # for jaco_base
-RUN apt-get update
 RUN apt install -y ros-noetic-trac-ik-kinematics-plugin
 
 # # by default, open in /home/user directory
