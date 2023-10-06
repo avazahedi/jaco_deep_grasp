@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <package format="2">
-  <name>jaco_deep_grasp</name>
+  <name>jaco_grasp_ros</name>
   <version>0.0.1</version>
   <description>Launch deep grasp demo for jaco 2 arm.</description>
 
