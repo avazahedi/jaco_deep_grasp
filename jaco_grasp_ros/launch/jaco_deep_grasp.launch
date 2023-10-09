@@ -1,11 +1,14 @@
 <?xml version="1.0"?>
 <launch>
+  <arg name="load_cloud" default="true"/>
+
   <!-- Run MTC demo -->
   <include file="$(find moveit_task_constructor_demo)/launch/demo.launch">
+    <arg name="load_cloud" value="$(arg load_cloud)"/>
   </include>
 
   <!-- Broadcast static tf for robot base to camera -->
-  <node pkg="tf2_ros" type="static_transform_publisher" name="tf_world_camera" args="0.5 0 0.7 0 0 0 world camera" />
+  <node pkg="tf2_ros" type="static_transform_publisher" name="tf_world_camera" args="0.5 0 0.7 0 0 0 world camera" if="$(arg load_cloud)"/>
 
   <!-- pcl_ros pcd to pointcloud -->
   <node name="pcd_to_pcl" pkg="pcl_ros" type="pcd_to_pointcloud" output="screen">
@@ -15,8 +18,17 @@
   </node>
 
   <!-- Run GPD demo -->
+  <!-- load_cloud = false means feeding pcl data from topic rather than pcd file -->
   <include file="$(find moveit_task_constructor_gpd)/launch/gpd_demo.launch">
-    <!-- <arg name="load_cloud" value="false"/> -->
+    <arg name="load_cloud" value="$(arg load_cloud)"/>
+  </include>
+
+  <!-- Broadcast static tf for robot base to camera -->
+  <node pkg="tf2_ros" type="static_transform_publisher" name="tf_world_camera" args="0.05 0 0.05 0 0 0 world camera_link" unless="$(arg load_cloud)"/>
+
+  <!-- Realsense -->
+  <include file="$(find realsense2_camera)/launch/rs_camera.launch" unless="$(arg load_cloud)">
+    <arg name="filters" value="pointcloud"/>
   </include>
 
 </launch>

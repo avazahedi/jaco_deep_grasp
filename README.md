@@ -44,6 +44,7 @@ where jaco_deep_grasp_cntr is the container name.
 
 Subsequent steps should be done in Docker.  
 ## ~~Set up GPD~~ Skip this for now
+Currently this step is done in creating the Docker image, so no need to do it manually.
 ```
 cd gpd
 mkdir build
