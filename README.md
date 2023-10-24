@@ -1,5 +1,8 @@
 # jaco_deep_grasp
+Author: Ava Zahedi (Northwestern MSR 2023)  
+In collaboration with NU Argallab and MSR.
 
+# Setup - Dependencies and Docker
 ## Prerequisites
 Import the necessary repositories listed in jaco_grasp.repos using vcs tool. To do so, clone this repository into the src directory of your workspace. Then, in the root of your workspace, run the following:  
 `vcs import < src/jaco_deep_grasp/jaco_grasp.repos`
@@ -73,8 +76,24 @@ If there is an issue getting python-pyudev, do
 apt-get install -y python3-pyudev
 ```
 
+# Setup - Demo
+## jaco_deep_grasp launch file
+jaco_deep_grasp.launch launchfile arguments
+* `load_cloud` defaults to true
+    * True if loading a pcd file directly. Set to false if listening to a ROS topic to receive point cloud data.
+    * If true, modify the `path_to_pcd_file` arg in `gpd_demo.launch` to the correct file path.
+    * If false, modify the `point_cloud_topic` arg in `gpd_demo.launch` to the correct topic.
+* `fake_execution` defaults to true
+    * True if just running the demo in Rviz. Set to false if connecting to the hardware and performing real execution.
 
-## Run deep grasp demos
+## Camera
+If collecting point cloud data from a camera, make sure to update the transform from root to the camera in `jaco_deep_grasp.launch`.  
+Also update the `trans_base_cam` transform in `camera.yaml`.
+
+## Place pose
+Set the desired place pose after grasping by modifying `place_pose` in `kinova_object.yaml`.
+
+## Run deep grasp demo in simulation (Rviz)
 Source the workspace
 ```
 source devel/setup.bash
@@ -84,3 +103,15 @@ Run the jaco_deep_grasp launch file
 ```
 roslaunch jaco_grasp_ros jaco_deep_grasp.launch
 ```
+
+## Run deep grasp demo on hardware
+Launch jaco_base
+```
+roslaunch jaco_interaction jaco_base.launch
+```
+
+Launch jaco_deep_grasp
+```
+roslaunch jaco_grasp_ros jaco_deep_grasp.launch load_cloud:=false fake_execution:=false
+```
+
