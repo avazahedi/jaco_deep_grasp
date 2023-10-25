@@ -1,10 +1,15 @@
 <?xml version="1.0"?>
 <launch>
   <arg name="load_cloud" default="true"/>
+  <arg name="fake_execution" default="true"/>
+
+  <!-- Load ROS parameters -->
+  <rosparam command="load" file="$(find jaco_grasp_ros)/config/constraints.yaml"/>
 
   <!-- Run MTC demo -->
   <include file="$(find moveit_task_constructor_demo)/launch/demo.launch">
     <arg name="load_cloud" value="$(arg load_cloud)"/>
+    <arg name="fake_execution" value="$(arg fake_execution)"/>
   </include>
 
   <!-- Broadcast static tf for robot base to camera -->
@@ -15,13 +20,12 @@
   <!-- published to /cloud_pcd topic -->
   <!-- *** frame_id here is wrong - not sure what the right one is for the provided cylinder.pcd pcl data -->
   <node name="pcd_to_pcl" pkg="pcl_ros" type="pcd_to_pointcloud" output="screen">
-      <!-- <param name="file_name" value="$(find moveit_task_constructor_gpd)/data/pointclouds/cylinder.pcd" /> -->
-      <param name="file_name" value="$(find jaco_grasp_ros)/pcd/cylinder/cylinder_noisy_0p02.pcd"/>
+      <param name="file_name" value="$(find moveit_task_constructor_gpd)/data/pointclouds/cylinder.pcd" />
+      <!-- <param name="file_name" value="$(find jaco_grasp_ros)/pcd/cylinder/cylinder_noisy_0p02.pcd"/> -->
       <!-- <param name="file_name" value="$(find jaco_grasp_ros)/pcd/test_meshlab/test_meshlab.pcd"/> -->
       <!-- <param name="file_name" value="$(find jaco_grasp_ros)/pcd/test_meshlab/test_meshlab2.pcd"/> -->
       <!-- <param name="file_name" value="$(find jaco_grasp_ros)/pcd/test_meshlab/test_meshlab_dense_1.pcd"/> -->
       <param name="interval" value="1"/>
-      <!-- <param name="frame_id" value="camera"/> -->
       <param name="frame_id" value="camera_link"/>
   </node>
 
@@ -61,6 +65,8 @@
   <node pkg="tf2_ros" type="static_transform_publisher" name="tf_root_intm" args="0 0 0 1.571 0 1.571 root intm" unless="$(arg load_cloud)"/>
   <node pkg="tf2_ros" type="static_transform_publisher" name="tf_intm_camera" args="0 0 0 3.1415 0 0 intm camera_link" unless="$(arg load_cloud)"/>
 
+  <!-- <node pkg="tf2_ros" type="static_transform_publisher" name="tf_root_intm" args="0 0 0 0 0 1.571 world intm" unless="$(arg load_cloud)"/>
+  <node pkg="tf2_ros" type="static_transform_publisher" name="tf_intm_camera" args="0 0 0 0 0 -1.571 intm camera_link" unless="$(arg load_cloud)"/> -->
 
   <!-- transform for realsense -->
   <!-- <node pkg="tf2_ros" type="static_transform_publisher" name="tf_world_camera" args="0 0 0 0 0 0 world camera_link" unless="$(arg load_cloud)"/> -->
