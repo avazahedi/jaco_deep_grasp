@@ -79,12 +79,14 @@ apt-get install -y python3-pyudev
 # Setup - Demo
 ## jaco_deep_grasp launch file
 jaco_deep_grasp.launch launchfile arguments
-* `load_cloud` defaults to true
+* `load_cloud` defaults to false
     * True if loading a pcd file directly. Set to false if listening to a ROS topic to receive point cloud data.
     * If true, modify the `path_to_pcd_file` arg in `gpd_demo.launch` to the correct file path.
     * If false, modify the `point_cloud_topic` arg in `gpd_demo.launch` to the correct topic.
 * `fake_execution` defaults to true
     * True if just running the demo in Rviz. Set to false if connecting to the hardware and performing real execution.
+<!-- * `cloud_pcd` defaults to false
+    * True if publishing a pcd file to the `/cloud_pcd` topic via pcl_ros. This is mostly for testing purposes. Set to false if using `load_cloud` or RealSense camera.  -->
 
 ## Camera
 If collecting point cloud data from a camera, make sure to update the transform from root to the camera in `jaco_deep_grasp.launch`.  
@@ -112,6 +114,6 @@ roslaunch jaco_interaction jaco_base.launch
 
 Launch jaco_deep_grasp
 ```
-roslaunch jaco_grasp_ros jaco_deep_grasp.launch load_cloud:=false fake_execution:=false
+roslaunch jaco_grasp_ros jaco_deep_grasp.launch fake_execution:=false
 ```
 
