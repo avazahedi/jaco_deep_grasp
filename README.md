@@ -46,16 +46,6 @@ jaco_deep_grasp_image
 where jaco_deep_grasp_cntr is the container name.
 
 Subsequent steps should be done in Docker.  
-## ~~Set up GPD~~ Skip this for now
-Currently this step is done in creating the Docker image, so no need to do it manually.
-```
-cd gpd
-mkdir build
-cd build
-cmake ..
-make -j
-make install
-```
 
 ## Build the workspace
 ```
@@ -110,6 +100,12 @@ roslaunch jaco_grasp_ros jaco_deep_grasp.launch
 Launch jaco_base
 ```
 roslaunch jaco_interaction jaco_base.launch
+```
+
+In another terminal, home the arm and set the control mode to trajectory
+```
+rosservice call /j2s7s300_driver/in/home_arm
+rosservice call /j2s7s300_driver/in/set_control_mode "current_control_mode: trajectory"
 ```
 
 Launch jaco_deep_grasp
