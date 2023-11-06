@@ -8,10 +8,9 @@ Import the necessary repositories listed in jaco_grasp.repos using vcs tool. To 
 `vcs import < src/jaco_deep_grasp/jaco_grasp.repos`
 
 The following repositories should be added to your workspace in their desired branches:
-- deep_grasp_demo (jaco_demo)
-- moveit_task_constructor (jaco_demo)
+- deep_grasp_demo (realsense)
+- moveit_task_constructor (realsense)
 - jaco_base (msr23-grasp)
-- gpd (master)
 
 Make sure the kinova-ros repository inside jaco_base is correctly cloned.  
 ```
