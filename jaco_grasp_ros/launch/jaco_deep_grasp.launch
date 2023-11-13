@@ -5,6 +5,7 @@
 
   <!-- Load ROS parameters -->
   <rosparam command="load" file="$(find jaco_grasp_ros)/config/constraints.yaml"/>
+  <param name="/move_group/ompl/maximum_waypoint_distance" value="0.05" />
 
   <!-- Run MTC demo -->
   <include file="$(find moveit_task_constructor_demo)/launch/demo.launch">
@@ -47,7 +48,7 @@
   <node pkg="tf2_ros" type="static_transform_publisher" name="tf_world_root" args="0 0 0 -1.5707 0 0 world root" />
   <!-- <node pkg="tf2_ros" type="static_transform_publisher" name="tf_world_camera" args="0 0 0.1 0 0 0 world camera_link" unless="$(arg load_cloud)"/> -->
   <!-- <node pkg="tf2_ros" type="static_transform_publisher" name="tf_root_camera" args="0 0 0.1 0 0 0 root camera_link" unless="$(arg load_cloud)"/> -->
-  <node pkg="tf2_ros" type="static_transform_publisher" name="tf_world_camera" args="0 -0.1 0.1 -1.5707 0 0 world camera_link" unless="$(arg load_cloud)"/>
+  <node pkg="tf2_ros" type="static_transform_publisher" name="tf_world_camera" args="0 -0.17 0.08 -1.5707 0 0 world camera_link" unless="$(arg load_cloud)"/>
   <!-- <node pkg="tf2_ros" type="static_transform_publisher" name="tf_world_camera" args="0 0 0.1 -1.5707 0 0 world camera_link" unless="$(arg load_cloud)"/> -->
 
   <!-- Realsense -->
