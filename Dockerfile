@@ -99,7 +99,8 @@ RUN apt install build-essential \
     # libatlas-base-dev \
     # gfortran pylint
 
-RUN apt install python3-opencv
+# RUN apt install python3-opencv
+RUN apt install opencv-python
 
 ## GPD library
 RUN git clone https://github.com/avazahedi/gpd \
@@ -136,12 +137,18 @@ RUN apt install -y python3-catkin-tools python3-osrf-pycommon
 ## Intel RealSense
 RUN mkdir -p /etc/apt/keyrings \
     && curl -sSf https://librealsense.intel.com/Debian/librealsense.pgp | tee /etc/apt/keyrings/librealsense.pgp > /dev/null \
-    && apt-get install apt-transport-https \
-    && echo "deb [signed-by=/etc/apt/keyrings/librealsense.pgp] https://librealsense.intel.com/Debian/apt-repo `lsb_release -cs` main" | tee /etc/apt/sources.list.d/librealsense.list
+    && apt-get install -y apt-transport-https \
+    && echo "deb [signed-by=/etc/apt/keyrings/librealsense.pgp] https://librealsense.intel.com/Debian/apt-repo `lsb_release -cs` main" | tee /etc/apt/sources.list.d/librealsense.list \
     && apt-get update \
     && apt-get install -y librealsense2-dkms \
     && apt-get install -y librealsense2-utils \
-    && apt-get install -y librealsense2-dev 
+    && apt-get install -y librealsense2-dev \
+    && apt-get install -y ros-noetic-realsense2-camera
+
+## YOLO Object Detection
+RUN pip install ultralytics \
+    && pip install pyrealsense2 \
+    && pip install numexpr==2.7.3
 
 ####DEEPGRASP####
 

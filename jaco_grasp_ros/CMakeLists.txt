@@ -10,11 +10,19 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 find_package(catkin REQUIRED COMPONENTS
 	roscpp
 	moveit_task_constructor_demo
-  moveit_task_constructor_gpd
+	moveit_task_constructor_gpd
+	rospy
+	sensor_msgs
+	control_msgs
+	std_msgs
 )
 
 catkin_package(
 	CATKIN_DEPENDS roscpp
+)
+
+catkin_install_python(PROGRAMS src/traj_plot.py src/object_detection.py
+  DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )
 
 include_directories(
