@@ -12,6 +12,8 @@ The following repositories should be added to your workspace in their desired br
 - moveit_task_constructor (realsense)
 - jaco_base (msr23-grasp)
 
+This repository (jaco_deep_grasp) should be in the nodes branch.
+
 Make sure the kinova-ros repository inside jaco_base is correctly cloned.  
 ```
 cd src/jaco_base
