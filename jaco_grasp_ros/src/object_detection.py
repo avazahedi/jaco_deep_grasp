@@ -7,7 +7,6 @@ import numpy as np
 import rospy
 from sensor_msgs.msg import Image, CameraInfo
 from cv_bridge import CvBridge
-from std_msgs.msg import Float32MultiArray
 from jaco_grasp_ros_interfaces.msg import BboxCoords
 # import torch
 # import rospkg
@@ -31,20 +30,12 @@ class ObjectDetection:
         self.bridge = CvBridge()
         self.model = YOLO('yolov8n-seg.pt')
 
-        # training on fridge dataset takes a LONG time
-        # self.model = YOLO('yolov8n.pt')
-        # self.rospack = rospkg.RosPack()
-        # self.rospack.get_path('jaco_grasp_ros')
-        # model_path = self.rospack.get_path('jaco_grasp_ros') + "/fridge_detection_YOLO_dataset/data.yaml"
-        # print(model_path)
-        # self.results = self.model.train(data=model_path, epochs=100, imgsz=640)
-
         # bottle, cup, laptop
         self.desired_object = "bottle"  # this will be able to be set by user
 
         # print(self.model.names)
 
-        self.frequency = 25.0
+        self.frequency = 30.0
         self.timer = rospy.Timer(rospy.Duration(1.0/self.frequency), self.timer_callback)
 
     def timer_callback(self, event=None):
@@ -92,7 +83,6 @@ class ObjectDetection:
                     # print(f"xleft: {xleft}")
                     # print(f"ytop: {ytop}")
                     # print(f"ybottom: {ybottom}")
-                    # print(f"right depth value: {self.depth_image[int(ycenter/1.5)][int(xright/1.509)]}")
 
                     # use depth of center of bounding box
                     depth = self.depth_image[int(ycenter)][int(xcenter)]
@@ -112,6 +102,7 @@ class ObjectDetection:
                     self.passthrough_vals.right = [i/1000. for i in right]
                     self.passthrough_vals.top = [i/1000. for i in top]
                     self.passthrough_vals.bottom = [i/1000. for i in bottom]
+                    self.passthrough_vals.center_depth = depth/1000.
                     self.passthrough_pub.publish(self.passthrough_vals)
 
         # press ESC or 'q' to closearray
@@ -129,7 +120,6 @@ class ObjectDetection:
     def depth_callback(self, msg):
         # Get depth image
         self.depth_image = self.bridge.imgmsg_to_cv2(msg)
-        # self.depth_image is of size (480, 848)
 
     def intr_callback(self, msg):
         # Set camera intrinsics

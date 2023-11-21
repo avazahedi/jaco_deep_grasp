@@ -99,8 +99,7 @@ RUN apt install build-essential \
     # libatlas-base-dev \
     # gfortran pylint
 
-# RUN apt install python3-opencv
-RUN apt install opencv-python
+RUN apt install python3-opencv
 
 ## GPD library
 RUN git clone https://github.com/avazahedi/gpd \
@@ -154,7 +153,7 @@ RUN pip install ultralytics \
 
 # for jaco_base
 RUN apt-get update \
-    && apt install -y ros-noetic-trac-ik-kinematics-plugin=1.6.6-1focal.20230801.154350
+    && apt install -y ros-noetic-trac-ik-kinematics-plugin
 
 # # by default, open in /home/user directory
 # RUN cd /home/avaz
@@ -166,7 +165,7 @@ ENV DISPLAY=$DISPLAY
 ENV QT_X11_NO_MITSHM=1
 
 # setup entrypoint
-RUN echo "source /opt/ros/$ROS_DISTRO/setup.bash" >> ~/.bashrc
+# RUN echo "source /opt/ros/$ROS_DISTRO/setup.bash" >> ~/.bashrc
 
 # Entry script
 COPY ./ros_entrypoint.sh /

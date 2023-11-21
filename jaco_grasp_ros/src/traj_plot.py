@@ -31,11 +31,6 @@ class TrajSubscriber:
     def traj_callback(self, msg): 
         # print('Callback executed!')
 
-        # now simply display what 
-        # you've received from the topic 
-        # rospy.loginfo(rospy.get_caller_id() + "The velocities are %s", 
-        #             FollowJointTrajectoryFeedback) 
-
         if self.executing.data == 1:
             # rospy.loginfo("Saving trajectory data...")
             self.seq.append(msg.header.seq)
@@ -54,8 +49,6 @@ class TrajSubscriber:
         # only want this after execution is done
         if msg.data == 2:
             rospy.loginfo("Plotting trajectory")
-            # print(f"self.seq: ", self.seq)
-            # print(f"self.desired: ", self.desired)
             fig = plt.figure("Joint Trajectories")
             for i in range(7):
                 # fig0 = plt.figure(f"Joint {i+1}")

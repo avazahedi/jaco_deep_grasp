@@ -76,8 +76,6 @@ jaco_deep_grasp.launch launchfile arguments
     * If false, modify the `point_cloud_topic` arg in `gpd_demo.launch` to the correct topic.
 * `fake_execution` defaults to true
     * True if just running the demo in Rviz. Set to false if connecting to the hardware and performing real execution.
-<!-- * `cloud_pcd` defaults to false
-    * True if publishing a pcd file to the `/cloud_pcd` topic via pcl_ros. This is mostly for testing purposes. Set to false if using `load_cloud` or RealSense camera.  -->
 
 ## Camera
 If collecting point cloud data from a camera, make sure to update the transform from root to the camera in `jaco_deep_grasp.launch`.  
