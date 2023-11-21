@@ -2,6 +2,8 @@
 <launch>
   <arg name="load_cloud" default="false"/>
   <arg name="fake_execution" default="true"/>
+  <arg name="plot_traj" default="false"/>
+  <!-- plot_traj should never be true if fake_execution is true -->
 
   <!-- Load ROS parameters -->
   <rosparam command="load" file="$(find jaco_grasp_ros)/config/constraints.yaml"/>
@@ -43,6 +45,8 @@
   <!-- <node pkg="tf2_ros" type="static_transform_publisher" name="tf_world_camera" args="0 0 0 -1.5707 0 0 world camera_link" unless="$(arg load_cloud)"/> -->
 
 
+  <!-- If plot_traj, run trajectory plotting node -->
+  <!-- <node pkg="jaco_grasp_ros" type="traj_plot" name="traj_plot" if="$(arg plot_traj)"/> -->
 
   <!-- transform for realsense -->
   <node pkg="tf2_ros" type="static_transform_publisher" name="tf_world_root" args="0 0 0 -1.5707 0 0 world root" />
@@ -54,6 +58,13 @@
   <!-- Realsense -->
   <include file="$(find realsense2_camera)/launch/rs_camera.launch" unless="$(arg load_cloud)">
     <arg name="filters" value="pointcloud"/>
+    <arg name="color_width" value="540"/>
+    <arg name="color_height" value="960"/>
+    <arg name="color_fps" value="30"/>
+    <arg name="depth_width" value="540"/>
+    <arg name="depth_height" value="960"/>
+    <arg name="depth_fps" value="30"/>
+    <arg name="align_depth" value="true"/>
   </include>
 
 </launch>

@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>jaco_grasp_ros_interfaces</name>
+  <version>0.0.1</version>
+  <description>Interfaces for jaco_grasp_ros package.</description>
+
+  <author email="avazahedi2023@u.northwestern.edu">Ava Zahedi</author>
+  <maintainer email="avazahedi2023@u.northwestern.edu">Ava Zahedi</maintainer>
+
+  <license>BSD</license>
+
+  <buildtool_depend>catkin</buildtool_depend>
+
+  <depend>roscpp</depend>
+  <depend>rosparam_shortcuts</depend>
+  <depend>rospy</depend>
+  <depend>sensor_msgs</depend>
+  <depend>control_msgs</depend>
+  <depend>std_msgs</depend>
+
+  <build_depend>message_generation</build_depend>
+  <exec_depend>message_runtime</exec_depend>
+
+  <test_depend>rostest</test_depend>
+</package>
