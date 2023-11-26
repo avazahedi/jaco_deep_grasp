@@ -31,7 +31,8 @@ class ObjectDetection:
         self.model = YOLO('yolov8n-seg.pt')
 
         # bottle, cup, laptop
-        self.desired_object = "bottle"  # this will be able to be set by user
+        # self.desired_object = "bottle"  # this will be able to be set by user
+        self.desired_object = rospy.get_param("/desired_object")    # defaults to "bottle"
 
         # print(self.model.names)
 
@@ -85,7 +86,7 @@ class ObjectDetection:
                     # print(f"ybottom: {ybottom}")
 
                     # use depth of center of bounding box
-                    depth = self.depth_image[int(ycenter)][int(xcenter)]
+                    depth = self.depth_image[ycenter][xcenter]
 
                     if depth == 0:
                         return
@@ -97,12 +98,15 @@ class ObjectDetection:
                     top = rs.rs2_deproject_pixel_to_point(self.intr, [xcenter, ytop], depth)
                     bottom = rs.rs2_deproject_pixel_to_point(self.intr, [xcenter, ybottom], depth)
 
+                    center = rs.rs2_deproject_pixel_to_point(self.intr, [xcenter, ycenter], depth)
+
                     # convert to m
                     self.passthrough_vals.left = [i/1000. for i in left]
                     self.passthrough_vals.right = [i/1000. for i in right]
                     self.passthrough_vals.top = [i/1000. for i in top]
                     self.passthrough_vals.bottom = [i/1000. for i in bottom]
                     self.passthrough_vals.center_depth = depth/1000.
+                    self.passthrough_vals.center = [i/1000. for i in center]
                     self.passthrough_pub.publish(self.passthrough_vals)
 
         # press ESC or 'q' to closearray

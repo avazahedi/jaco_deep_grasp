@@ -4,10 +4,13 @@
   <arg name="fake_execution" default="true"/>
   <arg name="plot_traj" default="false"/>
   <!-- plot_traj should never be true if fake_execution is true -->
+  <arg name="desired_object" default="bottle"/>
 
   <!-- Load ROS parameters -->
   <rosparam command="load" file="$(find jaco_grasp_ros)/config/constraints.yaml"/>
   <param name="/move_group/ompl/maximum_waypoint_distance" value="0.05" />
+  <!-- <param name="/grasp_cloud_detection/desired_object" value="$(arg desired_object)" /> -->
+  <param name="/desired_object" value="$(arg desired_object)" />
 
   <!-- Run MTC demo -->
   <include file="$(find moveit_task_constructor_demo)/launch/demo.launch">
@@ -61,12 +64,12 @@
     <arg name="align_depth" value="true"/>
     <arg name="enable_infra1" value="false"/>
     <arg name="enable_infra2" value="false"/>
-    <arg name="color_width" value="540"/>
+    <!-- <arg name="color_width" value="540"/>
     <arg name="color_height" value="960"/>
     <arg name="color_fps" value="30"/>
     <arg name="depth_width" value="540"/>
     <arg name="depth_height" value="960"/>
-    <arg name="depth_fps" value="30"/>
+    <arg name="depth_fps" value="30"/> -->
   </include>
 
   <!-- Object detection node -->
