@@ -3,6 +3,7 @@ Author: Ava Zahedi (Northwestern MSR 2023)
 In collaboration with NU Argallab and MSR.
 
 # Setup - Dependencies and Docker
+**This repository (jaco_deep_grasp) should be in the nodes branch.**
 ## Prerequisites
 Import the necessary repositories listed in jaco_grasp.repos using vcs tool. To do so, clone this repository into the src directory of your workspace. Then, in the root of your workspace, run the following:  
 `vcs import < src/jaco_deep_grasp/jaco_grasp.repos`
@@ -11,8 +12,6 @@ The following repositories should be added to your workspace in their desired br
 - deep_grasp_demo (realsense)
 - moveit_task_constructor (realsense)
 - jaco_base (msr23-grasp)
-
-This repository (jaco_deep_grasp) should be in the nodes branch.
 
 Make sure the kinova-ros repository inside jaco_base is correctly cloned.  
 ```
@@ -107,8 +106,30 @@ rosservice call /j2s7s300_driver/in/home_arm
 rosservice call /j2s7s300_driver/in/set_control_mode "current_control_mode: trajectory"
 ```
 
-Launch jaco_deep_grasp
+In another terminal, launch jaco_deep_grasp
 ```
 roslaunch jaco_grasp_ros jaco_deep_grasp.launch fake_execution:=false
 ```
+<br>
 
+# Notes
+### Error Fix: Kinematics plugin (arm) failed to load
+When running the jaco_deep_grasp.launch launch file, if there is an error: `The kinematics plugin (arm) failed to load.` do the following inside your Docker container:
+```
+apt purge -y ros-noetic-moveit*
+apt update
+apt install -y ros-noetic-moveit*
+apt install -y ros-noetic-geometric-shapes
+apt install -y ros-noetic-srdfdom
+apt install -y ros-noetic-ompl
+apt install -y ros-noetic-trac-ik-kinematics-plugin
+```
+
+Then, rebuild your workspace with `catkin build`
+
+This happens because of conflicting versions of MoveIt packages in the container. Uninstalling and reinstalling MoveIt makes sure the versions are consistent.
+
+<br>
+
+### Unfinished Work
+The `generate-collision-object` branch in the deep_grasp_demo and jaco_deep_grasp repositories contain unfinished work towards dynamically generating a collision object based on information from YOLO. This would enable the user to place the object anywhere in the workspace and have MoveIt plan to an object location without having to predefine it in the kinova_object.yaml file that gets loaded into the ROS parameter server. Functionality for placing the object anywhere is already in place for point cloud segmentation and YOLO object detection.
