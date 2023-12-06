@@ -75,6 +75,8 @@ jaco_deep_grasp.launch launchfile arguments
     * If false, modify the `point_cloud_topic` arg in `gpd_demo.launch` to the correct topic.
 * `fake_execution` defaults to true
     * True if just running the demo in Rviz. Set to false if connecting to the hardware and performing real execution.
+* `desired_object` defaults to "bottle"
+    * The class of the object you want to pick up. Some good options with the currently loaded YOLO model are cup and bottle.
 
 ## Camera
 If collecting point cloud data from a camera, make sure to update the transform from root to the camera in `jaco_deep_grasp.launch`.  
@@ -132,4 +134,5 @@ This happens because of conflicting versions of MoveIt packages in the container
 <br>
 
 ### Unfinished Work
-The `generate-collision-object` branch in the deep_grasp_demo and jaco_deep_grasp repositories contain unfinished work towards dynamically generating a collision object based on information from YOLO. This would enable the user to place the object anywhere in the workspace and have MoveIt plan to an object location without having to predefine it in the kinova_object.yaml file that gets loaded into the ROS parameter server. Functionality for placing the object anywhere is already in place for point cloud segmentation and YOLO object detection.
+The `generate-collision-object` branch in the deep_grasp_demo and jaco_deep_grasp repositories contain unfinished work towards dynamically generating a collision object based on information from YOLO. This would enable the user to place the object anywhere in the workspace and have MoveIt plan to an object location without having to predefine it in the kinova_object.yaml file that gets loaded into the ROS parameter server. Functionality for placing the object anywhere is already in place for point cloud segmentation and YOLO object detection.  
+The main issue I was running into was figuring out how to send this newly-generated object as a goal to MoveIt using the existing architecture of deep grasp.

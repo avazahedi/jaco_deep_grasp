@@ -30,8 +30,9 @@ class ObjectDetection:
         self.bridge = CvBridge()
         self.model = YOLO('yolov8n-seg.pt')
 
-        # bottle, cup, laptop
-        self.desired_object = "bottle"  # this will be able to be set by user
+        # bottle, cup, bowl, etc.
+        # self.desired_object = "bottle"  # this will be able to be set by user
+        self.desired_object = rospy.get_param("/desired_object")    # defaults to "bottle"
 
         # print(self.model.names)
 

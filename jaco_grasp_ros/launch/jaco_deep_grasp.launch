@@ -4,10 +4,12 @@
   <arg name="fake_execution" default="true"/>
   <arg name="plot_traj" default="false"/>
   <!-- plot_traj should never be true if fake_execution is true -->
+  <arg name="desired_object" default="bottle"/>
 
   <!-- Load ROS parameters -->
   <rosparam command="load" file="$(find jaco_grasp_ros)/config/constraints.yaml"/>
   <param name="/move_group/ompl/maximum_waypoint_distance" value="0.05" />
+  <param name="/desired_object" value="$(arg desired_object)" />
 
   <!-- Run MTC demo -->
   <include file="$(find moveit_task_constructor_demo)/launch/demo.launch">
