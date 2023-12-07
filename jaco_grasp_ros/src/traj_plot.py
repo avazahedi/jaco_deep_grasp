@@ -5,8 +5,6 @@ from control_msgs.msg import FollowJointTrajectoryFeedback
 import matplotlib.pyplot as plt
 from std_msgs.msg import Int8
 from datetime import datetime
-# from IPython import embed
-
 
 class TrajSubscriber: 
 
@@ -17,9 +15,9 @@ class TrajSubscriber:
         self.fin_sub = rospy.Subscriber("/trajectory_finished", 
                                         Int8, self.fin_callback)
         
-        # # 0 = before execution
-        # # 1 = during execution
-        # # 2 = after execution
+        # 0 = before execution
+        # 1 = during execution
+        # 2 = after execution
         self.executing = Int8()
         self.executing.data = 0
 
@@ -29,8 +27,6 @@ class TrajSubscriber:
         self.error = [[] for i in range(7)]
 
     def traj_callback(self, msg): 
-        # print('Callback executed!')
-
         if self.executing.data == 1:
             # rospy.loginfo("Saving trajectory data...")
             self.seq.append(msg.header.seq)

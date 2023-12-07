@@ -2,8 +2,19 @@
 Author: Ava Zahedi (Northwestern MSR 2023)  
 In collaboration with NU Argallab and MSR.
 
+# Overview
+This project builds on [MoveIt Deep Grasps](https://ros-planning.github.io/moveit_tutorials/doc/moveit_deep_grasps/moveit_deep_grasps_tutorial.html) to implement autonomous grasping capabilities on the 7-DOF Kinova Jaco Gen2 arm (model j2s7s300).  
+
+The pipeline begins with a RealSense camera that publishes the following to ROS topics: point cloud data, RGB image, and aligned depth image. The RGB and depth images are used with YOLOv8 for object detection, labeling, and segmentation. This information is then used to perform segmentation and filtering on the point cloud.  
+The segmented cloud is passed into Grasp Pose Detection (GPD), a neural network used to generate viable grasp poses given a point cloud of the desired object to grasp. From these grasps, a motion plan is constructed to be used with MoveIt so that the arm can navigate to, pick, and place the object.  
+
+Originally designed in simulation only and on a Franka Panda robot, some of my modifications and additions from MoveIt Deep Grasps include:
+* Adaptation to the Kinova Jaco arm
+* Translation to live hardware trajectory execution
+* Live point cloud generation, segmentation, and filtering
+* YOLOv8 object detection to provide semantic labeling and segmentation parameters for the object to grasp
+
 # Setup - Dependencies and Docker
-**This repository (jaco_deep_grasp) should be in the nodes branch.**
 ## Prerequisites
 Import the necessary repositories listed in jaco_grasp.repos using vcs tool. To do so, clone this repository into the src directory of your workspace. Then, in the root of your workspace, run the following:  
 `vcs import < src/jaco_deep_grasp/jaco_grasp.repos`
@@ -21,7 +32,14 @@ cd kinova-ros
 git switch msr23-grasp
 ```
 
-## Set up Docker
+The `main` and `nodes` branches of this repository (jaco_deep_grasp) should be the same, and either will work for this demo.
+
+## Hardware Requirements
+* Intel RealSense Depth Camera D435i (both simulation and hardware)
+    * Use a USB 3.2 or better cable for best results
+* 7-DOF Kinova Jaco Gen2 arm - j2s7s300 (only required for hardware demo)
+
+## Set Up Docker
 First, build the image from the included Dockerfile  
 ```
 cd src/jaco_deep_grasp
@@ -41,13 +59,12 @@ sudo docker run -it --privileged \
 --name jaco_deep_grasp_cntr \
 --net=host \
 jaco_deep_grasp_image
-
 ```
-where jaco_deep_grasp_cntr is the container name.
+where `jaco_deep_grasp_cntr` is the container name.
 
 Subsequent steps should be done in Docker.  
 
-## Build the workspace
+## Build the Workspace
 ```
 # cd into jaco_grasp_ws
 catkin build
@@ -75,17 +92,23 @@ jaco_deep_grasp.launch launchfile arguments
     * If false, modify the `point_cloud_topic` arg in `gpd_demo.launch` to the correct topic.
 * `fake_execution` defaults to true
     * True if just running the demo in Rviz. Set to false if connecting to the hardware and performing real execution.
-* `desired_object` defaults to "bottle"
+* `desired_object` defaults to bottle
     * The class of the object you want to pick up. Some good options with the currently loaded YOLO model are cup and bottle.
 
 ## Camera
-If collecting point cloud data from a camera, make sure to update the transform from root to the camera in `jaco_deep_grasp.launch`.  
+If collecting point cloud data from a RealSense camera, make sure to update the transform from root to the camera in `jaco_deep_grasp.launch`.  
 Also update the `trans_base_cam` transform in `camera.yaml`.
 
-## Place pose
+## Properties of Object to be Picked
+This is for creating a collision object to represent the object being picked. This gets used in generating the motion plan.  
+Set the `object_pose` and `object_dimensions` in `kinova_object.yaml`.  
+* See the **Unfinished Work** section at the end of the README for information regarding my progress towards dynamic collision object generation.
+
+## Place Pose
 Set the desired place pose after grasping by modifying `place_pose` in `kinova_object.yaml`.
 
-## Run deep grasp demo in simulation (Rviz)
+# Running Jaco Deep Grasp
+## Run Deep Grasp Demo in Simulation (Rviz)
 Source the workspace
 ```
 source devel/setup.bash
@@ -96,7 +119,7 @@ Run the jaco_deep_grasp launch file
 roslaunch jaco_grasp_ros jaco_deep_grasp.launch
 ```
 
-## Run deep grasp demo on hardware
+## Run Deep Grasp Demo on Hardware
 Launch jaco_base
 ```
 roslaunch jaco_interaction jaco_base.launch
@@ -112,7 +135,6 @@ In another terminal, launch jaco_deep_grasp
 ```
 roslaunch jaco_grasp_ros jaco_deep_grasp.launch fake_execution:=false
 ```
-<br>
 
 # Notes
 ### Error Fix: Kinematics plugin (arm) failed to load
@@ -131,8 +153,9 @@ Then, rebuild your workspace with `catkin build`
 
 This happens because of conflicting versions of MoveIt packages in the container. Uninstalling and reinstalling MoveIt makes sure the versions are consistent.
 
-<br>
+### Plotting Trajectory Execution on Hardware
+One challenge I had with this project was having a good plan generated in MoveIt but inconsistent trajectory execution on the hardware. The `traj_plot.py` node can be run separately when launching the demo with `fake_execution:=false`. This will generate graphs following the trajectory execution that show the desired and actual positions of each of the joints, as well as the error between them. This node is purely informative and meant to give a better understanding of whether or not the hardware is properly calibrated. 
 
-### Unfinished Work
+### Unfinished Work - Dynamic Collision Object Generation
 The `generate-collision-object` branch in the deep_grasp_demo and jaco_deep_grasp repositories contain unfinished work towards dynamically generating a collision object based on information from YOLO. This would enable the user to place the object anywhere in the workspace and have MoveIt plan to an object location without having to predefine it in the kinova_object.yaml file that gets loaded into the ROS parameter server. Functionality for placing the object anywhere is already in place for point cloud segmentation and YOLO object detection.  
-The main issue I was running into was figuring out how to send this newly-generated object as a goal to MoveIt using the existing architecture of deep grasp.
+The main issue I was running into was figuring out how to send this newly-generated object as a goal to MoveIt using the existing architecture of deep grasp.  

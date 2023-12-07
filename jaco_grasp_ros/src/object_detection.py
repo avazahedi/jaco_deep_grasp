@@ -15,7 +15,6 @@ class ObjectDetection:
     def __init__(self):
         # realsense subscribers
         self.rgb_sub = rospy.Subscriber("/camera/color/image_raw", Image, self.rgb_callback)
-        # self.depth_sub = rospy.Subscriber("/camera/depth/image_rect_raw", Image, self.depth_callback)
         self.depth_sub = rospy.Subscriber("/camera/aligned_depth_to_color/image_raw", Image, self.depth_callback)
         self.intr_sub = rospy.Subscriber("/camera/color/camera_info", CameraInfo, self.intr_callback)
 
@@ -34,8 +33,6 @@ class ObjectDetection:
         # self.desired_object = "bottle"  # this will be able to be set by user
         self.desired_object = rospy.get_param("/desired_object")    # defaults to "bottle"
 
-        # print(self.model.names)
-
         self.frequency = 30.0
         self.timer = rospy.Timer(rospy.Duration(1.0/self.frequency), self.timer_callback)
 
@@ -45,14 +42,7 @@ class ObjectDetection:
 
         self.results = self.model.predict(self.color_image, conf=0.7, verbose=False, save_txt=False)
         annotated_img = self.results[0].plot()
-        cv2.imshow("YOLOv8 Inference", annotated_img)   # same as show=True in self.model.predict
-
-        # print(self.results[0].boxes.xywhn) # x_center, y_center, width, height (normalized by original image size)
-        # print(self.results[0].boxes.xywh) # x_center, y_center, width, height
-
-        # for r in self.results:
-        #     for c in r.boxes.cls:
-        #         print(self.model.names[int(c)])
+        cv2.imshow("YOLOv8 Inference", annotated_img)
 
         # RealSense is 1280x720
         # check if the name of the class matches what we want to grasp
@@ -63,27 +53,11 @@ class ObjectDetection:
                     # xcenter, ycenter, width, height = xywh
                     xcenter, ycenter, width, height = [int(i) for i in xywh]
 
-                    # print(f"xcenter: {xcenter}")
-                    # print(f"ycenter: {ycenter}")
-                    # print(f"width: {width}")
-                    # print(f"height: {height}")
-
-                    # print(f"self.intr.width: {self.intr.width}")
-                    # print(f"self.intr.height: {self.intr.height}")
-
-                    # either send xywh values to grasp_detection.cpp for processing,
-                    # or process values before sending
-
                     # pixel values to be deprojected [xleft, xright, ytop, ybottom]
                     xleft = int(xcenter - width/2)
                     xright = int(xcenter + width/2)
                     ytop = int(ycenter + height/2)
                     ybottom = int(ycenter - height/2)
-
-                    # print(f"xright: {xright}")
-                    # print(f"xleft: {xleft}")
-                    # print(f"ytop: {ytop}")
-                    # print(f"ybottom: {ybottom}")
 
                     # use depth of center of bounding box
                     depth = self.depth_image[int(ycenter)][int(xcenter)]
@@ -115,7 +89,6 @@ class ObjectDetection:
     def rgb_callback(self, msg):
         self.color_image = self.bridge.imgmsg_to_cv2(msg)
         self.color_image = cv2.cvtColor(self.color_image, cv2.COLOR_BGR2RGB) # convert BGR to RGB
-        # cv2.imshow("raw image", self.color_image)
 
 
     def depth_callback(self, msg):
