@@ -14,6 +14,8 @@ Originally designed in simulation only and on a Franka Panda robot, some of my m
 * Live point cloud generation, segmentation, and filtering
 * YOLOv8 object detection to provide semantic labeling and segmentation parameters for the object to grasp
 
+For more information, see my corresponding [portfolio post](https://avazahedi.github.io/projects/01-jaco-deep-grasps).
+
 # Live Demo
 This is the live video along with the corresponding computer screencast showing YOLO object detection and visualization in Rviz.  
 
