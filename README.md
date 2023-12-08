@@ -14,6 +14,13 @@ Originally designed in simulation only and on a Franka Panda robot, some of my m
 * Live point cloud generation, segmentation, and filtering
 * YOLOv8 object detection to provide semantic labeling and segmentation parameters for the object to grasp
 
+# Live Demo
+This is the live video along with the corresponding computer screencast showing YOLO object detection and visualization in Rviz.  
+
+https://github.com/avazahedi/jaco_deep_grasp/assets/39091881/68a3b8e9-68c6-458e-a7c5-8815961fa89a
+
+https://github.com/avazahedi/jaco_deep_grasp/assets/39091881/3b010bf4-64fc-47da-9618-b5e05e032a34
+
 # Setup - Dependencies and Docker
 ## Prerequisites
 Import the necessary repositories listed in jaco_grasp.repos using vcs tool. To do so, clone this repository into the src directory of your workspace. Then, in the root of your workspace, run the following:  
@@ -102,6 +109,7 @@ Also update the `trans_base_cam` transform in `camera.yaml`.
 ## Properties of Object to be Picked
 This is for creating a collision object to represent the object being picked. This gets used in generating the motion plan.  
 Set the `object_pose` and `object_dimensions` in `kinova_object.yaml`.  
+* The gripper for this arm does not have force sensors, so the close pose is position-based. Because of this, the close pose in `j2s7s300.srdf` needs to be tuned for the object you want to grasp. The range of values for the finger joints is 0.0-1.4, though 0.2-1.2 is recommended to avoid hitting limits. Future work remains for dynamically doing this process.  
 * See the **Unfinished Work** section at the end of the README for information regarding my progress towards dynamic collision object generation.
 
 ## Place Pose
@@ -135,13 +143,6 @@ In another terminal, launch jaco_deep_grasp
 ```
 roslaunch jaco_grasp_ros jaco_deep_grasp.launch fake_execution:=false
 ```
-
-# Live Demo
-This is the live video along with the corresponding computer screencast showing YOLO object detection and visualization in Rviz.  
-
-https://github.com/avazahedi/jaco_deep_grasp/assets/39091881/68a3b8e9-68c6-458e-a7c5-8815961fa89a
-
-https://github.com/avazahedi/jaco_deep_grasp/assets/39091881/3b010bf4-64fc-47da-9618-b5e05e032a34
 
 # Notes
 ### Error Fix: Kinematics plugin (arm) failed to load
