@@ -136,6 +136,13 @@ In another terminal, launch jaco_deep_grasp
 roslaunch jaco_grasp_ros jaco_deep_grasp.launch fake_execution:=false
 ```
 
+# Live Demo
+This is the live video along with the corresponding computer screencast showing YOLO object detection and visualization in Rviz.  
+
+https://github.com/avazahedi/jaco_deep_grasp/assets/39091881/68a3b8e9-68c6-458e-a7c5-8815961fa89a
+
+https://github.com/avazahedi/jaco_deep_grasp/assets/39091881/3b010bf4-64fc-47da-9618-b5e05e032a34
+
 # Notes
 ### Error Fix: Kinematics plugin (arm) failed to load
 When running the jaco_deep_grasp.launch launch file, if there is an error: `The kinematics plugin (arm) failed to load.` do the following inside your Docker container:
